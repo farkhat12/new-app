@@ -4,7 +4,7 @@ import ProfileInfo from "@/features/profile/components/profile-info";
 import { serverApi } from "@/lib/api/server-api";
 
 export default async function ProfilePage() {
-  const data = await serverApi("/users/me");
+  const data = await serverApi("/api/users/me");
 
   return (
     <div className="min-w-0 space-y-4 w-full">

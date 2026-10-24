@@ -6,19 +6,19 @@ export const registerSteps: RegisterStepConfig[] = [
   {
     id: "info",
     fields: ["name", "phone"],
-    endpoint: "/auth/check-phone",
+    endpoint: "/api/auth/check-phone",
     payloadFields: ["phone"],
   },
   {
     id: "password",
     fields: ["password", "confirmPassword"],
-    endpoint: "/auth/register",
+    endpoint: "/api/auth/register",
     payloadFields: ["name", "phone", "password"],
   },
   {
     id: "otp",
     fields: ["otp"],
-    endpoint: "/auth/verify-otp",
+    endpoint: "/api/auth/verify-otp",
     payloadFields: ["phone", "otp"],
   },
 ] as const;
