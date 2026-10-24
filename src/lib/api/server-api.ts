@@ -1,33 +1,29 @@
-"use server";
+import "server-only";
+import { cache } from "react";
 import { cookies } from "next/headers";
 import { redirect } from "next/navigation";
 
-const BASE_URL = process.env.NEXT_PUBLIC_API_URL || "http://localhost:5000";
+export async function apiFetch<T>(
+  path: string,
+  init: RequestInit = {},
+): Promise<T> {
+  const token = (await cookies()).get("access_token")?.value;
+  if (!token) redirect("/login");
 
-export async function serverApi(endpoint: string, options: RequestInit = {}) {
-  const cookieStore = await cookies();
-  const token = cookieStore.get("access_token")?.value;
-
-  if (!token) {
-    redirect("/login");
-  }
-
-  console.log("jjj");
-
-  const res = await fetch(`${BASE_URL}${endpoint}`, {
-    ...options,
-    headers: {
-      Cookie: `access_token=${token}`,
-      "Content-Type": "application/json",
-      ...options.headers,
-    },
+  const res = await fetch(`${process.env.API_URL}${path}`, {
+    ...init,
+    headers: { ...init.headers, Authorization: `Bearer ${token}` },
     cache: "no-store",
-    credentials: "include",
   });
 
-  if (!res.ok) {
-    throw new Error(`API қатесі: ${res.statusText} (${endpoint})`);
-  }
+  if (res.status === 401) redirect("/login");
+  if (!res.ok) throw new Error(`API ${res.status} ${path}`);
 
-  return res.json();
+  const json = await res.json();
+  return (json.data ?? json) as T;
 }
+
+export type Me = { id: string; name: string; phone: string; role: string };
+
+// бір render ішінде бірнеше рет шақырса да, сұрау бір ғана кетеді
+export const getMe = cache(() => apiFetch<Me>("/users/me"));
