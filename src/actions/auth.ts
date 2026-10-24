@@ -52,6 +52,9 @@ export async function loginAction(
     };
   }
 
+  const data = await res.json();
+  console.log(data, "hh");
+
   const { accessToken, refreshToken } = await res.json();
   const store = await cookies();
   store.set("access_token", accessToken, accessOpts);
