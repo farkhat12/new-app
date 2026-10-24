@@ -1,7 +1,16 @@
 import { Header } from "@/components/layout/header";
 import { BottomNavigation, Sidebar } from "@/components/layout/navigation";
+import { api } from "@/lib/api/axios";
+import { useEffect } from "react";
 
 export default async function MainLayout({ children }: LayoutProps<"/">) {
+  useEffect(() => {
+    const get = async () => {
+      const res = await api.get("/api/users/me");
+      console.log(res.data, "kkk");
+    };
+    get();
+  }, []);
   return (
     <main className="h-full bg-[#f4f6f9] flex-col-reverse md:flex-row min-h-dvh max-h-dvh overflow-hidden flex">
       <Sidebar />
