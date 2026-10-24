@@ -1,6 +1,6 @@
 import { Header } from "@/components/layout/header";
 import { BottomNavigation, Sidebar } from "@/components/layout/navigation";
-import { UserProvider } from "@/components/providers/user-provider";
+
 export default async function MainLayout({ children }: LayoutProps<"/">) {
   return (
     <main className="h-full bg-[#f4f6f9] flex-col-reverse md:flex-row min-h-dvh max-h-dvh overflow-hidden flex">

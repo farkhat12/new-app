@@ -26,9 +26,9 @@ export function UserProvider({
     const fetchUser = async () => {
       try {
         const { data } = await api.get("/api/users/me");
+        console.log(data, "hello");
 
         if (!cancelled) {
-          // API ResponseInterceptor форматына сәйкес ретте.
           setUser(data.data ?? data);
         }
       } catch {
