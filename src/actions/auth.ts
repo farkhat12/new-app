@@ -20,7 +20,7 @@ export async function loginAction(
 
   let res: Response;
   try {
-    res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/auth/login`, {
+    res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/auth/login`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(parsed.data), // { phone, password }
@@ -38,7 +38,18 @@ export async function loginAction(
     };
   }
   if (!res.ok) {
-    return { ok: false, status: "error", message: "Something went wrong" };
+    const text = await res.text().catch(() => "");
+    console.error(
+      "LOGIN FAILED",
+      res.status,
+      text,
+      `${process.env.API_URL}/auth/login`,
+    );
+    return {
+      ok: false,
+      status: "error",
+      message: `Something went wrong (${res.status})`,
+    };
   }
 
   const { accessToken, refreshToken } = await res.json();
