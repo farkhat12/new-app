@@ -3,7 +3,6 @@ import { useEffect, type ReactNode } from "react";
 import { api } from "@/lib/api/axios";
 import { useUserStore } from "@/stores/user.store";
 import { User } from "@/features/auth/types/register.types";
-import { serverApi } from "@/lib/api/server-api";
 
 interface UserProviderProps {
   children: ReactNode;
@@ -26,7 +25,7 @@ export function UserProvider({
 
     const fetchUser = async () => {
       try {
-        const { data } = await serverApi("/api/users/me");
+        const { data } = await api.get("/api/users/me");
 
         if (!cancelled) {
           // API ResponseInterceptor форматына сәйкес ретте.
