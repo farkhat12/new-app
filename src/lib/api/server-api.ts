@@ -23,10 +23,6 @@ export async function serverApi(endpoint: string, options: RequestInit = {}) {
     credentials: "include",
   });
 
-  if (res.status === 401) {
-    redirect("/login");
-  }
-
   if (!res.ok) {
     throw new Error(`API қатесі: ${res.statusText} (${endpoint})`);
   }
