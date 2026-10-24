@@ -23,7 +23,7 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
     <html lang="en" className={`${poppins.className}`}>
       <body className="text-gray-900">
         <Toaster richColors position="top-center" />
-        <UserProvider>{children}</UserProvider>
+        {children}
       </body>
     </html>
   );
