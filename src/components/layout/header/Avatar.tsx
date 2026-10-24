@@ -10,10 +10,11 @@ import { Avatar, AvatarFallback, AvatarImage } from "@/shared/ui/avatar";
 import { ChevronDown, UserRound, LogOut } from "lucide-react";
 import Link from "next/link";
 import { useUIStore } from "@/stores/ui.store";
-import { User } from "@/features/auth/types/register.types";
+import { useUserStore } from "@/stores/user.store";
 
-export function HeaderAvatar({ user }: { user: User | null }) {
+export function HeaderAvatar() {
   const openModal = useUIStore((store) => store.openModal);
+  const user = useUserStore((state) => state.user);
 
   const name = user?.name
     ? user.name.charAt(0).toLocaleUpperCase() + user.name.slice(1)
