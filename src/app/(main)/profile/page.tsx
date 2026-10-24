@@ -1,10 +1,10 @@
 "use server";
 import { ApartmentTabs } from "@/features/profile/components/apartment-tabs";
 import ProfileInfo from "@/features/profile/components/profile-info";
-import { serverApi } from "@/lib/api/server-api";
+import { getUser } from "@/lib/api/session";
 
 export default async function ProfilePage() {
-  const data = await serverApi("/api/users/me");
+  const data = await getUser();
 
   return (
     <div className="min-w-0 space-y-4 w-full">
