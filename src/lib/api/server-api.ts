@@ -10,7 +10,7 @@ export async function apiFetch<T>(
   const token = (await cookies()).get("access_token")?.value;
   if (!token) redirect("/login");
 
-  const res = await fetch(`${process.env.API_URL}${path}`, {
+  const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}${path}`, {
     ...init,
     headers: { ...init.headers, Authorization: `Bearer ${token}` },
     cache: "no-store",
