@@ -2,13 +2,14 @@
 import { Header } from "@/components/layout/header";
 import { BottomNavigation, Sidebar } from "@/components/layout/navigation";
 import { api } from "@/lib/api/axios";
+import { serverApi } from "@/lib/api/server-api";
 import { useEffect } from "react";
 
 export default async function MainLayout({ children }: LayoutProps<"/">) {
   useEffect(() => {
     const get = async () => {
-      const res = await api.get("/api/users/me");
-      console.log(res.data, "kkk");
+      const res = await serverApi("/api/users/me");
+      console.log(res, "new fetch in layout");
     };
     get();
   }, []);
