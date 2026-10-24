@@ -1,4 +1,3 @@
-
 import { ApartmentStatus } from "@/types/apartment.types";
 import { create } from "zustand";
 
