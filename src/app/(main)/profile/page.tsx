@@ -4,11 +4,11 @@ import ProfileInfo from "@/features/profile/components/profile-info";
 import { getMe } from "@/lib/api/server-api";
 
 export default async function ProfilePage() {
-  const data = await getMe();
+  const user = await getMe();
 
   return (
     <div className="min-w-0 space-y-4 w-full">
-      <ProfileInfo userInfo={data} />
+      <ProfileInfo userInfo={user} />
       <ApartmentTabs />
     </div>
   );
