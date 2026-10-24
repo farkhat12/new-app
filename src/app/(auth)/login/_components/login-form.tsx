@@ -34,7 +34,7 @@ export function LoginForm() {
 
   const onSubmit = async (data: LoginFormValues) => {
     try {
-      await api.post("/api//auth/login", data);
+      await api.post("/api/auth/login", data);
       router.push("/profile");
     } catch (error: unknown) {
       if (axios.isAxiosError(error) && error.response?.status === 401) {
