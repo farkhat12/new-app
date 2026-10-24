@@ -25,4 +25,4 @@ export async function apiFetch<T>(
 }
 
 // бір render ішінде бірнеше рет шақырса да, сұрау бір ғана кетеді
-export const getMe = cache(() => apiFetch("/users/me"));
+export const getMe = cache(() => apiFetch<User>("/users/me"));
