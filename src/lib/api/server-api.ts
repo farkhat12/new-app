@@ -2,6 +2,7 @@ import "server-only";
 import { cache } from "react";
 import { cookies } from "next/headers";
 import { redirect } from "next/navigation";
+import { User } from "@/features/auth/types/register.types";
 
 export async function apiFetch<T>(
   path: string,
@@ -23,7 +24,5 @@ export async function apiFetch<T>(
   return (json.data ?? json) as T;
 }
 
-export type Me = { id: string; name: string; phone: string; role: string };
-
 // бір render ішінде бірнеше рет шақырса да, сұрау бір ғана кетеді
-export const getMe = cache(() => apiFetch<Me>("/users/me"));
+export const getMe = cache(() => apiFetch<User>("/users/me"));
