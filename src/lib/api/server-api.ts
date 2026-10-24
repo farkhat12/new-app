@@ -19,6 +19,7 @@ export async function serverApi(endpoint: string, options: RequestInit = {}) {
       ...options.headers,
     },
     cache: "no-store",
+    credentials: "include",
   });
 
   if (res.status === 401) {
