@@ -21,6 +21,7 @@ import {
 } from "@/features/auth/schema/login.schema";
 import axios from "axios";
 import { toast } from "sonner";
+import { loginAction } from "@/actions/auth";
 const defaultValues: LoginFormValues = { phone: "", password: "" };
 
 export function LoginForm() {
@@ -33,16 +34,17 @@ export function LoginForm() {
   const { isSubmitting } = form.formState;
 
   const onSubmit = async (data: LoginFormValues) => {
-    try {
-      await api.post("/api/auth/login", data);
+    const result = await loginAction(data);
+    if (result.ok) {
       router.push("/profile");
-    } catch (error: unknown) {
-      if (axios.isAxiosError(error) && error.response?.status === 401) {
-        form.setError("root", { message: "Invalid phone or password" });
-        return;
-      }
-      toast.error("error");
+      router.refresh();
+      return;
     }
+    if (result.status === "invalid") {
+      form.setError("root", { message: result.message });
+      return;
+    }
+    toast.error(result.message);
   };
   return (
     <Card className="w-full rounded-[18px] py-0 md:gap-2 gap-1 border-slate-200 bg-white shadow-[0_2px_4px_rgba(0,0,0,0.08)] md:translate-y-0 -translate-y-1/4 max-w-md border">
