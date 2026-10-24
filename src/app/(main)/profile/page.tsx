@@ -8,7 +8,8 @@ export default async function ProfilePage() {
 
   return (
     <div className="min-w-0 space-y-4 w-full">
-      {data}
+      <h1>{data?.data?.name}</h1>
+      <h2>{data?.name}</h2>
       {/* <ProfileInfo userInfo={data.data.data} /> */}
       <ApartmentTabs />
     </div>
