@@ -11,6 +11,7 @@ import {
 } from "../ui/alert-dialog";
 import { useState } from "react";
 import { useRouter } from "next/navigation";
+import { logoutAction } from "@/actions/auth";
 
 const LogoutDialog = () => {
   const key = "logout";
@@ -20,13 +21,7 @@ const LogoutDialog = () => {
   const closeModal = useUIStore((store) => store.closeModal);
   const [loading, setLoading] = useState(false);
   const handleLogout = async (e: React.MouseEvent) => {
-    setLoading(true);
-    setTimeout(() => {
-      setLoading(false);
-      closeModal();
-      router.replace("/login");
-      router.refresh();
-    }, 1000);
+    await logoutAction();
   };
   return (
     <AlertDialog open={isOpen}>
