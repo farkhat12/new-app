@@ -12,6 +12,8 @@ export async function serverApi(endpoint: string, options: RequestInit = {}) {
     redirect("/login");
   }
 
+  console.log("jjj");
+
   const res = await fetch(`${BASE_URL}${endpoint}`, {
     ...options,
     headers: {
