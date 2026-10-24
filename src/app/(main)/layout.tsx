@@ -1,3 +1,4 @@
+"use client";
 import { Header } from "@/components/layout/header";
 import { BottomNavigation, Sidebar } from "@/components/layout/navigation";
 import { api } from "@/lib/api/axios";
