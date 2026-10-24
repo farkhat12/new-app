@@ -5,7 +5,7 @@ import { Avatar, AvatarFallback } from "@/shared/ui/avatar";
 import { Phone } from "lucide-react";
 
 const ProfileInfo = ({ userInfo }: { userInfo: User }) => {
-  const { name, phone, id } = userInfo;
+  const { name, phone } = userInfo;
   const firstName: string = name[0].toLocaleUpperCase() + "" + name.slice(1);
 
   return (

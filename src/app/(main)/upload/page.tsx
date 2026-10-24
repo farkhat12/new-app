@@ -1,5 +1,4 @@
 "use client";
-
 import type { ComponentType } from "react";
 import { useRouter } from "next/navigation";
 import { FormProvider, useForm, type DefaultValues } from "react-hook-form";
@@ -12,17 +11,17 @@ import {
 import { UploadStepId } from "@/features/upload/types/upload.types";
 import UploadCardHeader from "@/features/upload/components/upload-header";
 import { UploadProgressOverlay } from "@/features/upload/components/upload-overlay";
+import { useApartmentUploadFlow } from "@/features/upload/hooks/use-upload-flow";
 // steps
 import InfoStep from "@/features/upload/components/steps/info-step";
 import ImageStep from "@/features/upload/components/steps/image-step";
 import MapStep from "@/features/upload/components/steps/map-step";
-import PreviewStep from "@/features/upload/components/steps/overview";
-import { useApartmentUploadFlow } from "@/features/upload/hooks/use-upload-flow";
+import Overview from "@/features/upload/components/steps/overview";
 
 const defaultValues: DefaultValues<ApartmentFormValues> = {
   address: "",
   orienteer: "",
-  price: undefined,
+  price: 0,
   phone: "",
   rooms: 2,
   rentType: undefined,
@@ -35,7 +34,7 @@ const stepComponents: Record<UploadStepId, ComponentType> = {
   info: InfoStep,
   images: ImageStep,
   map: MapStep,
-  overview: PreviewStep,
+  overview: Overview,
 };
 
 export default function UploadPage() {
@@ -67,7 +66,6 @@ export default function UploadPage() {
         {isUploading && (
           <UploadProgressOverlay uploadProgress={uploadProgress} />
         )}
-
         <UploadCardHeader currentStep={currentStep} />
 
         <FormProvider {...form}>

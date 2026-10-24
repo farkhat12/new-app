@@ -41,12 +41,9 @@ const Sidebar = () => {
         <div
           onClick={() => openModal("logout")}
           className={cn(
-            // mobil: tömengi menyu
-            "flex h-13 cursor-pointer w-16 max-w-18.5 flex-1 flex-col items-center justify-center gap-1 rounded-xl px-1",
-            // md+: sidebar
-            "md:h-9 md:w-auto md:max-w-none md:flex-none md:flex-row md:justify-start md:gap-1 md:overflow-hidden md:rounded-md md:px-0",
-
-            "text-red-400 bg-red-100 hover:bg-red-200 hover:text-red-500",
+            "flex   flex-1 flex-col items-center justify-center gap-1 rounded-xl px-1",
+            "md:h-9 md:w-auto w-16 max-w-18.5 cursor-pointer md:max-w-none md:flex-none md:flex-row md:justify-start md:gap-1 md:overflow-hidden md:rounded-md md:px-0",
+            "text-red-400 bg-red-50 transition-colors hover:bg-red-100 hover:text-red-400",
           )}
         >
           <div className="flex items-center justify-center md:h-9 md:w-10 md:min-w-10 md:rounded-md">

@@ -1,21 +1,15 @@
 "use server";
-import { User } from "@/features/auth/types/register.types";
 import { ApartmentTabs } from "@/features/profile/components/apartment-tabs";
 import ProfileInfo from "@/features/profile/components/profile-info";
+import { serverApi } from "@/lib/api/server-api";
 
 export default async function ProfilePage() {
-  const user: User = {
-    id: "hd83by4bdy",
-    name: "Farkhat",
-    phone: "998936142724",
-    role: "user",
-    createdAt: "s",
-  };
+  const data = await serverApi("/users/me");
+
   return (
     <div className="min-w-0 space-y-4 w-full">
-      <ProfileInfo userInfo={user} />
+      <ProfileInfo userInfo={data.data} />
       <ApartmentTabs />
-      {/* <ProfileTabs /> */}
     </div>
   );
 }
