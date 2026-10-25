@@ -1,28 +1,30 @@
-import "server-only";
-import { cache } from "react";
+import axios, { AxiosRequestConfig } from "axios";
 import { cookies } from "next/headers";
-import { redirect } from "next/navigation";
-import { User } from "@/features/auth/types/register.types";
 
-export async function apiFetch<T>(
-  path: string,
-  init: RequestInit = {},
+const API_URL = process.env.NEXT_PUBLIC_API_URL;
+
+export const serverApi = axios.create({
+  baseURL: API_URL,
+  headers: {
+    Accept: "application/json",
+  },
+});
+
+serverApi.interceptors.request.use(async (config) => {
+  const cookieStore = await cookies();
+  const accessToken = cookieStore.get("access_token")?.value;
+
+  if (accessToken) {
+    config.headers.set("Authorization", `Bearer ${accessToken}`);
+  }
+
+  return config;
+});
+
+export async function serverApiGet<T>(
+  url: string,
+  config?: AxiosRequestConfig,
 ): Promise<T> {
-  const token = (await cookies()).get("access_token")?.value;
-  if (!token) redirect("/login");
-
-  const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}${path}`, {
-    ...init,
-    headers: { ...init.headers, Authorization: `Bearer ${token}` },
-    cache: "no-store",
-  });
-
-  if (res.status === 401) redirect("/login");
-  if (!res.ok) throw new Error(`API ${res.status} ${path}`);
-
-  const json = await res.json();
-  return (json.data ?? json) as T;
+  const response = await serverApi.get<T>(url, config);
+  return response.data;
 }
-
-// бір render ішінде бірнеше рет шақырса да, сұрау бір ғана кетеді
-export const getMe = cache(() => apiFetch<User>("/users/me"));
