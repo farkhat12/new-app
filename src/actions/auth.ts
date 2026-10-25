@@ -53,17 +53,17 @@ export async function loginAction(
   }
 
   const data = await res.json();
-  const { accessToken, refreshToken } = data.data ?? data;
+  const { access_token, refresh_token } = data.data ?? data;
 
-  if (!accessToken || !refreshToken) {
+  if (!access_token || !refresh_token) {
     console.error("LOGIN: tokens missing", data);
     return { ok: false, status: "error", message: "Invalid server response" };
   }
 
   //   const { accessToken, refreshToken } = await res.json();
   const store = await cookies();
-  store.set("access_token", accessToken, accessOpts);
-  store.set("refresh_token", refreshToken, refreshOpts);
+  store.set("access_token", access_token, accessOpts);
+  store.set("refresh_token", refresh_token, refreshOpts);
 
   return { ok: true };
 }
