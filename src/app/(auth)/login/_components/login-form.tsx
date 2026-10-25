@@ -14,12 +14,10 @@ import FormButton from "@/shared/buttons/form-button";
 import { FormProvider, useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useRouter } from "next/navigation";
-import { api } from "@/lib/api/axios";
 import {
   type LoginFormValues,
   loginSchema,
 } from "@/features/auth/schema/login.schema";
-import axios from "axios";
 import { toast } from "sonner";
 import { loginAction } from "@/actions/auth";
 const defaultValues: LoginFormValues = { phone: "", password: "" };
