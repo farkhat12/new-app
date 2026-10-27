@@ -1,6 +1,5 @@
-import React from "react";
-
-const Apartments = () => {
+"use server";
+const Apartments = async () => {
   return <div>Apartments</div>;
 };
 

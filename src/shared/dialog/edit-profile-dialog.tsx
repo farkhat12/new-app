@@ -42,7 +42,7 @@ export function EditProfileDialog({ user }: { user: User }) {
         <form className="space-y-4" noValidate>
           <div className="grid gap-4 sm:grid-cols-2">
             <Field id="firstName" label="First name">
-              <Input id="firstName" autoComplete="off" />
+              <Input id="firstName" autoComplete="off" value={user.name} />
             </Field>
             <Field id="lastName" label="Last name">
               <Input id="lastName" autoComplete="off" />

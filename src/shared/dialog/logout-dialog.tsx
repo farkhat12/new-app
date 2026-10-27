@@ -1,3 +1,4 @@
+"use client";
 import { useUIStore } from "@/stores/ui.store";
 import {
   AlertDialog,
@@ -10,18 +11,24 @@ import {
   AlertDialogTitle,
 } from "../ui/alert-dialog";
 import { useState } from "react";
-import { useRouter } from "next/navigation";
 import { logoutAction } from "@/actions/auth";
 
 const LogoutDialog = () => {
   const key = "logout";
-  const router = useRouter();
   const modal = useUIStore((store) => store.modalType);
   const isOpen = modal === key;
   const closeModal = useUIStore((store) => store.closeModal);
   const [loading, setLoading] = useState(false);
   const handleLogout = async (e: React.MouseEvent) => {
-    await logoutAction();
+    try {
+      setLoading(true);
+      await logoutAction();
+      closeModal();
+    } catch (error) {
+      console.log(error);
+    } finally {
+      setLoading(false);
+    }
   };
   return (
     <AlertDialog open={isOpen}>
@@ -34,10 +41,10 @@ const LogoutDialog = () => {
         </AlertDialogHeader>
         <AlertDialogFooter>
           <AlertDialogCancel disabled={loading} onClick={() => closeModal()}>
-            Bas tartu
+            Cancel
           </AlertDialogCancel>
           <AlertDialogAction onClick={handleLogout} disabled={loading}>
-            {loading ? "Şığıp jatır..." : "Şığu"}
+            {loading ? "Logging out ..." : "Log out"}
           </AlertDialogAction>
         </AlertDialogFooter>
       </AlertDialogContent>

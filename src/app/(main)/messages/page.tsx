@@ -4,7 +4,7 @@ import { AuthGuard } from "@/components/layout/auth-guard";
 const Messages = async () => {
   return (
     <AuthGuard>
-      <div>Messages</div>;
+      <div>Messages</div>
     </AuthGuard>
   );
 };

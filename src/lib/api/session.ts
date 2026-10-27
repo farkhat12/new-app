@@ -1,5 +1,8 @@
 import "server-only";
 import { cookies } from "next/headers";
+import { UserRole } from "@/features/auth/types/register.types";
+import { getUser } from "@/features/auth/api/get-user.ts";
+import { redirect } from "next/navigation";
 
 export const ACCESS_COOKIE = "access_token";
 export const REFRESH_COOKIE = "refresh_token";
@@ -28,4 +31,18 @@ export async function clearSession() {
 
 export async function getAccessToken() {
   return (await cookies()).get(ACCESS_COOKIE)?.value;
+}
+
+export async function requireUser(role?: UserRole) {
+  const user = await getUser();
+
+  if (!user) {
+    redirect("/login");
+  }
+
+  if (role && user.role !== role) {
+    redirect("/");
+  }
+
+  return user;
 }

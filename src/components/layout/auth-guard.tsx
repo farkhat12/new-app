@@ -3,6 +3,8 @@ import { UnauthorizedCard } from "@/features/auth/constants/cards/unauthorized-c
 
 export async function AuthGuard({ children }: { children: React.ReactNode }) {
   const user = await getUser();
-  if (!user) return <UnauthorizedCard />;
+  if (!user) {
+    return <UnauthorizedCard />;
+  }
   return <>{children}</>;
 }
