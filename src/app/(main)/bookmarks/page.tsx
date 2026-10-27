@@ -1,7 +1,7 @@
 "use server";
 import { AuthGuard } from "@/components/layout/auth-guard";
 
-const BookmarksPage = () => {
+const BookmarksPage = async () => {
   return (
     <AuthGuard>
       <div>BookmarksPage</div>
