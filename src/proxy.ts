@@ -13,7 +13,7 @@ export async function proxy(req: NextRequest) {
   const refreshToken = req.cookies.get("refresh_token")?.value;
   if (!refreshToken) return toLogin();
 
-  const r = await fetch(`${process.env.API_URL}/auth/refresh`, {
+  const r = await fetch(`${process.env.API_URL}/api/auth/refresh`, {
     method: "POST",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify({ refreshToken }),
@@ -35,5 +35,5 @@ export async function proxy(req: NextRequest) {
 }
 
 export const config = {
-  matcher: ["/profile/:path*", "/upload/:path*", "/apartments/:path*"],
+  matcher: ["/login"],
 };

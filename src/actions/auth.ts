@@ -20,7 +20,7 @@ export async function loginAction(
 
   let res: Response;
   try {
-    res = await fetch(`${process.env.API_URL}/auth/login`, {
+    res = await fetch(`${process.env.API_URL}/api/auth/login`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(parsed.data), // { phone, password }
@@ -43,7 +43,7 @@ export async function loginAction(
       "LOGIN FAILED",
       res.status,
       text,
-      `${process.env.API_URL}/auth/login`,
+      `${process.env.API_URL}/api/auth/login`,
     );
     return {
       ok: false,

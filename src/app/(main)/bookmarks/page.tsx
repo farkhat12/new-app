@@ -1,9 +1,12 @@
-import React from 'react'
+"use server";
+import { AuthGuard } from "@/components/layout/auth-guard";
 
 const BookmarksPage = () => {
   return (
-    <div>BookmarksPage</div>
-  )
-}
+    <AuthGuard>
+      <div>BookmarksPage</div>
+    </AuthGuard>
+  );
+};
 
-export default BookmarksPage
+export default BookmarksPage;

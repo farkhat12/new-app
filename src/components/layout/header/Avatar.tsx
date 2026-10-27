@@ -12,7 +12,7 @@ import Link from "next/link";
 import { useUIStore } from "@/stores/ui.store";
 import { User } from "@/features/auth/types/register.types";
 
-export function HeaderAvatar({ user }: { user: User | null }) {
+export function HeaderAvatar({ user }: { user: User }) {
   const openModal = useUIStore((store) => store.openModal);
 
   const name = user?.name

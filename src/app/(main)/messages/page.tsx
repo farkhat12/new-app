@@ -1,9 +1,12 @@
-import React from 'react'
+"use server";
+import { AuthGuard } from "@/components/layout/auth-guard";
 
-const Messages = () => {
+const Messages = async () => {
   return (
-    <div>Messages</div>
-  )
-}
+    <AuthGuard>
+      <div>Messages</div>;
+    </AuthGuard>
+  );
+};
 
-export default Messages
+export default Messages;
