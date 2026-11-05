@@ -74,7 +74,6 @@ export function useApartmentUploadFlow(
     }
   };
 
-  // Соңғы step-те схеманың бәрі қайта тексеріледі; қате ертерек step-те болса, сонда қайтарамыз
   const onInvalid = (errors: FieldErrors<ApartmentFormValues>): void => {
     const failing = apartmentSteps.find((s) =>
       s.fields.some((f) => f in errors),

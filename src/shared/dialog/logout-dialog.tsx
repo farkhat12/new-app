@@ -11,7 +11,7 @@ import {
   AlertDialogTitle,
 } from "../ui/alert-dialog";
 import { useState } from "react";
-import { logoutAction } from "@/actions/auth";
+import { logoutAction } from "@/features/auth/actions/logout.action";
 
 const LogoutDialog = () => {
   const key = "logout";

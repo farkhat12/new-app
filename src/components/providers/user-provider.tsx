@@ -1,49 +1,21 @@
 "use client";
-import { useEffect, type ReactNode } from "react";
-import { api } from "@/lib/api/axios";
+import { useEffect } from "react";
 import { useUserStore } from "@/stores/user.store";
 import { User } from "@/features/auth/types/register.types";
 
 interface UserProviderProps {
-  children: ReactNode;
-  initialUser?: User | null;
+  user: User | null;
+  children: React.ReactNode;
 }
 
-export function UserProvider({
-  children,
-  initialUser = null,
-}: UserProviderProps) {
+const UserProvider = ({ user, children }: UserProviderProps) => {
   const setUser = useUserStore((state) => state.setUser);
 
   useEffect(() => {
-    if (initialUser) {
-      setUser(initialUser);
-      return;
-    }
-
-    let cancelled = false;
-
-    const fetchUser = async () => {
-      try {
-        const { data } = await api.get("/api/users/me");
-        console.log(data, "hello");
-
-        if (!cancelled) {
-          setUser(data.data ?? data);
-        }
-      } catch {
-        if (!cancelled) {
-          setUser(null);
-        }
-      }
-    };
-
-    void fetchUser();
-
-    return () => {
-      cancelled = true;
-    };
-  }, [initialUser, setUser]);
+    setUser(user);
+  }, [user, setUser]);
 
   return children;
-}
+};
+
+export default UserProvider;

@@ -13,17 +13,18 @@ import { House } from "lucide-react";
 import FormButton from "@/shared/buttons/form-button";
 import { FormProvider, useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { useRouter } from "next/navigation";
 import {
   type LoginFormValues,
   loginSchema,
 } from "@/features/auth/schema/login.schema";
-import { toast } from "sonner";
-import { loginAction } from "@/actions/auth";
-const defaultValues: LoginFormValues = { phone: "", password: "" };
+import { loginAction } from "@/features/auth/actions/login.action";
+
+const defaultValues: LoginFormValues = {
+  phone: "+998936142724",
+  password: "11111111",
+};
 
 export function LoginForm() {
-  const router = useRouter();
   const form = useForm<LoginFormValues>({
     resolver: zodResolver(loginSchema),
     mode: "onSubmit",
@@ -32,17 +33,7 @@ export function LoginForm() {
   const { isSubmitting } = form.formState;
 
   const onSubmit = async (data: LoginFormValues) => {
-    const result = await loginAction(data);
-    if (result.ok) {
-      router.push("/profile");
-      router.refresh();
-      return;
-    }
-    if (result.status === "invalid") {
-      form.setError("root", { message: result.message });
-      return;
-    }
-    toast.error(result.message);
+    await loginAction(data);
   };
   return (
     <Card className="w-full rounded-[18px] py-0 md:gap-2 gap-1 border-slate-200 bg-white shadow-[0_2px_4px_rgba(0,0,0,0.08)] md:translate-y-0 -translate-y-1/4 max-w-md border">

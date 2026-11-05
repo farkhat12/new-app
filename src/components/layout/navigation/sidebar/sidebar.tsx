@@ -6,10 +6,12 @@ import { LogOut, Menu } from "lucide-react";
 import { useUIStore } from "@/stores/ui.store";
 import LogoutDialog from "@/shared/dialog/logout-dialog";
 import { cn } from "cn";
+import { useUserStore } from "@/stores/user.store";
 
 const Sidebar = () => {
   const sidebarOpen = useUIStore((state) => state.isSidebarOpen);
   const openModal = useUIStore((store) => store.openModal);
+  const user = useUserStore((state) => state.user);
   const toggleSidebar = useUIStore((state) => state.toggleSidebar);
   return (
     <div
@@ -38,29 +40,31 @@ const Sidebar = () => {
         ))}
       </nav>
       <div className="flex border-t border-gray-200 flex-col p-2 gap-1">
-        <div
-          onClick={() => openModal("logout")}
-          className={cn(
-            "flex   flex-1 flex-col items-center justify-center gap-1 rounded-xl px-1",
-            "md:h-9 md:w-auto w-16 max-w-18.5 cursor-pointer md:max-w-none md:flex-none md:flex-row md:justify-start md:gap-1 md:overflow-hidden md:rounded-md md:px-0",
-            "text-red-400 bg-red-50 transition-colors hover:bg-red-100 hover:text-red-400",
-          )}
-        >
-          <div className="flex items-center justify-center md:h-9 md:w-10 md:min-w-10 md:rounded-md">
-            <LogOut
-              className="h-5 w-5 shrink-0"
-              strokeWidth={sidebarOpen ? 2.5 : 2}
-            />
-          </div>
-          <span
+        {user && (
+          <div
+            onClick={() => openModal("logout")}
             className={cn(
-              "text-[11px] font-medium md:truncate md:text-[13px] md:font-normal",
-              !sidebarOpen && "md:hidden",
+              "flex   flex-1 flex-col items-center justify-center gap-1 rounded-xl px-1",
+              "md:h-9 md:w-auto w-16 max-w-18.5 cursor-pointer md:max-w-none md:flex-none md:flex-row md:justify-start md:gap-1 md:overflow-hidden md:rounded-md md:px-0",
+              "text-red-400 bg-red-50 transition-colors hover:bg-red-100 hover:text-red-400",
             )}
           >
-            Logout
-          </span>
-        </div>
+            <div className="flex items-center justify-center md:h-9 md:w-10 md:min-w-10 md:rounded-md">
+              <LogOut
+                className="h-5 w-5 shrink-0"
+                strokeWidth={sidebarOpen ? 2.5 : 2}
+              />
+            </div>
+            <span
+              className={cn(
+                "text-[11px] font-medium md:truncate md:text-[13px] md:font-normal",
+                !sidebarOpen && "md:hidden",
+              )}
+            >
+              Logout
+            </span>
+          </div>
+        )}
       </div>
       <LogoutDialog />
     </div>

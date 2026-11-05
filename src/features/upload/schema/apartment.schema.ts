@@ -19,10 +19,7 @@ export const apartmentSchema = z.object({
     .positive("Price must be greater than 0")
     .max(100_000_000, "Price is too high"),
 
-  phone: z
-    .string()
-    .trim()
-    .regex(/^\+[1-9]\d{7,14}$/, "Enter a valid phone number"),
+  phone: z.string().regex(/^\+998\d{9}$/, "Invalid phone number"),
 
   rooms: z
     .number({ message: "Select number of rooms" })

@@ -8,6 +8,7 @@ const InfoStep = () => {
   return (
     <div className="py-1 flex flex-col gap-0.5">
       <TextInput name="address" placeholder="Enter address" label="Address" />
+      <div className="mt-2"></div>
       <TextInput
         name="orienteer"
         placeholder="Enter orienteer"

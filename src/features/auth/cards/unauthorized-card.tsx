@@ -1,12 +1,11 @@
 "use client";
-
-import { Button } from "@/shared/ui/button";
 import { motion, useReducedMotion } from "framer-motion";
-import { ArrowLeft, ShieldAlert } from "lucide-react";
-import { useRouter } from "next/navigation";
+import { ShieldAlert } from "lucide-react";
+import { usePathname, useRouter } from "next/navigation";
 
 export function UnauthorizedCard() {
   const router = useRouter();
+  const pathname = usePathname();
   const shouldReduceMotion = useReducedMotion();
 
   return (
@@ -15,6 +14,7 @@ export function UnauthorizedCard() {
         initial={
           shouldReduceMotion ? false : { opacity: 0, scale: 0.85, y: 20 }
         }
+        key={pathname}
         animate={{ opacity: 1, scale: 1, y: 0 }}
         transition={{
           duration: 0.45,
