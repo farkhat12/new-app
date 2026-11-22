@@ -1,4 +1,3 @@
-"use server";
 import { Header } from "@/components/layout/header";
 import { BottomNavigation, Sidebar } from "@/components/layout/navigation";
 import UserProvider from "@/components/providers/user-provider";
@@ -6,14 +5,15 @@ import { getUser } from "@/features/auth/api/get-user.ts";
 
 export default async function MainLayout({ children }: LayoutProps<"/">) {
   const user = await getUser();
+
   return (
     <UserProvider user={user ?? null}>
-      <main className="h-full bg-[#f4f6f9] flex-col-reverse md:flex-row min-h-dvh max-h-dvh overflow-hidden flex">
+      <main className="flex h-dvh flex-col-reverse overflow-hidden bg-[#f4f6f9] md:flex-row">
         <Sidebar />
         <BottomNavigation />
-        <section className="flex flex-col overflow-hidden h-100dvh max-h-dvh relative flex-1">
+        <section className="relative flex h-full flex-1 flex-col overflow-hidden">
           <Header />
-          <div className="page flex-1 overflow-y-scroll overflow-x-hidden md:p-2 p-1 py-2 md:py-3">
+          <div className="page flex-1 overflow-y-auto overflow-x-hidden p-1 py-2 md:p-2 md:py-3">
             {children}
           </div>
         </section>

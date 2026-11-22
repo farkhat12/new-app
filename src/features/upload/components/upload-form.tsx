@@ -36,6 +36,7 @@ const stepComponents: Record<UploadStepId, ComponentType> = {
   map: MapStep,
   overview: Overview,
 };
+
 const UploadForm = () => {
   const router = useRouter();
 

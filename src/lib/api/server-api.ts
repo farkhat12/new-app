@@ -1,50 +1,26 @@
 import "server-only";
+import axios from "axios";
+import { cookies } from "next/headers";
+import { apiClient } from "./api-client";
+import { clientApi } from "./client-axios";
 
-import axios, {
-  type AxiosRequestConfig,
-  type InternalAxiosRequestConfig,
-} from "axios";
-
-import { getAccessToken } from "@/lib/session";
-const baseURL = process.env.API_BACK_URL;
-
-if (!baseURL) {
-  throw new Error("API_BACK_URL is not set");
-}
-
-export class UnauthenticatedError extends Error {
-  constructor() {
-    super("Unauthenticated");
-    this.name = "UnauthenticatedError";
-  }
-}
+const baseURL = process.env.NEXT_PUBLIC_BACK_URL;
 
 export const serverApi = axios.create({
   baseURL,
-  headers: {
-    Accept: "application/json",
-  },
+  headers: { "Content-Type": "application/json" },
 });
 
-serverApi.interceptors.request.use(
-  async (config: InternalAxiosRequestConfig) => {
-    const accessToken = await getAccessToken();
+/* ------------------------- Request ------------------------- */
+serverApi.interceptors.request.use(async (config) => {
+  const cookie = await cookies();
+  const access_token = cookie.get("access_token")?.value;
 
-    if (!accessToken) {
-      throw new UnauthenticatedError();
-    }
+  if (access_token) {
+    config.headers.Authorization = `Bearer ${access_token}`;
+  }
 
-    config.headers.Authorization = `Bearer ${accessToken}`;
+  return config;
+});
 
-    return config;
-  },
-);
-
-export async function serverApiGet<T>(
-  url: string,
-  config?: AxiosRequestConfig,
-): Promise<T> {
-  const response = await serverApi.get<T>(url, config);
-
-  return response.data;
-}
+/* ------------------------- Response ------------------------- */

@@ -12,10 +12,12 @@ import {
 } from "../ui/alert-dialog";
 import { useState } from "react";
 import { logoutAction } from "@/features/auth/actions/logout.action";
+import { useUserStore } from "@/stores/user.store";
 
 const LogoutDialog = () => {
   const key = "logout";
   const modal = useUIStore((store) => store.modalType);
+  const clearUser = useUserStore((s) => s.clearUser);
   const isOpen = modal === key;
   const closeModal = useUIStore((store) => store.closeModal);
   const [loading, setLoading] = useState(false);
@@ -23,6 +25,7 @@ const LogoutDialog = () => {
     try {
       setLoading(true);
       await logoutAction();
+      clearUser();
       closeModal();
     } catch (error) {
       console.log(error);

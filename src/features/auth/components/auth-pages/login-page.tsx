@@ -17,14 +17,16 @@ import {
   type LoginFormValues,
   loginSchema,
 } from "@/features/auth/schema/login.schema";
-import { loginAction } from "@/features/auth/actions/login.action";
+import { apiClient } from "@/lib/api/api-client";
+import { useRouter } from "next/navigation";
 
 const defaultValues: LoginFormValues = {
   phone: "+998936142724",
   password: "11111111",
 };
 
-export function LoginForm() {
+export function LoginPage() {
+  const route = useRouter();
   const form = useForm<LoginFormValues>({
     resolver: zodResolver(loginSchema),
     mode: "onSubmit",
@@ -32,8 +34,18 @@ export function LoginForm() {
   });
   const { isSubmitting } = form.formState;
 
-  const onSubmit = async (data: LoginFormValues) => {
-    await loginAction(data);
+  const onSubmit = async (values: LoginFormValues) => {
+    try {
+      const parsed = loginSchema.safeParse(values);
+      if (!parsed.success) {
+        return { ok: false, error: "Дұрыс емес деректер" };
+      }
+      const { data } = await apiClient.post("/auth/login", parsed.data);
+
+      route.replace("/apartments");
+    } catch (error) {
+      console.log(error);
+    }
   };
   return (
     <Card className="w-full rounded-[18px] py-0 md:gap-2 gap-1 border-slate-200 bg-white shadow-[0_2px_4px_rgba(0,0,0,0.08)] md:translate-y-0 -translate-y-1/4 max-w-md border">

@@ -1,80 +1,141 @@
-"use client";
-import { UseFormReturn } from "react-hook-form";
-import { RegisterFormValues } from "../schema/register.schema";
-
-import { useCallback, useRef, useState } from "react";
-import { registerSteps } from "../constants/register-steps";
-import { toast } from "sonner";
-import { validateFormStep } from "@/lib/utils/validate-form-step";
-import { api } from "@/lib/api/axios";
+import { useCallback, useEffect, useState } from "react";
 import { RegisterStore, useRegisterStore } from "../store/register.store";
+import { authApi } from "../api/api";
+import { RegisterFormValues } from "../schema/register.schema";
+import { toast } from "sonner";
 
-interface ApiResponse<T> {
-  data: T;
-}
+export function useRegisterFlow({ onSuccess }: { onSuccess: () => void }) {
+  const [isPending, setIsPending] = useState(false);
+  const [isResending, setIsResending] = useState(false);
+  const [secondsLeft, setSecondsLeft] = useState(0);
 
-interface Options {
-  onComplete?: () => void;
-}
-
-export function useRegisterFlow(
-  form: UseFormReturn<RegisterFormValues>,
-  { onComplete }: Options = {},
-) {
+  const next = useRegisterStore((state: RegisterStore) => state.next);
+  const back = useRegisterStore((state: RegisterStore) => state.back);
+  const reset = useRegisterStore((state: RegisterStore) => state.resetStep);
+  const storeValues = useRegisterStore((state: RegisterStore) => state.values);
+  const setValues = useRegisterStore((state) => state.setValues);
   const currentStep = useRegisterStore(
     (state: RegisterStore) => state.currentStep,
   );
-  const setStep = useRegisterStore((state: RegisterStore) => state.setStep);
-  const [isLoading, setIsLoading] = useState(false);
 
-  const inFlight = useRef(false);
+  useEffect(() => {
+    if (secondsLeft <= 0) return;
+    const timer = setInterval(() => {
+      setSecondsLeft((prev) => prev - 1);
+    }, 1000);
 
-  const handleNext = useCallback(async (): Promise<void> => {
-    if (inFlight.current) return;
-    inFlight.current = true;
-    setIsLoading(true);
+    return () => {
+      clearInterval(timer);
+    };
+  }, [secondsLeft]);
 
+  useEffect(() => {
+    return reset();
+  }, [reset]);
+
+  // Step 1
+  const submitInfo = useCallback(
+    async (values: Partial<RegisterFormValues>) => {
+      try {
+        setIsPending(true);
+
+        await authApi.checkPhone(values);
+        toast.success("Set a password");
+        setValues(values);
+        next();
+        return true;
+      } catch (error) {
+        console.log(error);
+        return false;
+      } finally {
+        setIsPending(false);
+      }
+    },
+    [next, setValues],
+  );
+
+  // Step 2
+  const submitPassword = useCallback(
+    async (values: Partial<RegisterFormValues>) => {
+      try {
+        setIsPending(true);
+        const payload = {
+          name: storeValues.name,
+          phone: storeValues.phone,
+          ...values,
+        };
+
+        const data = await authApi.register(payload);
+        const serverCooldown = data.data?.data.cooldownRemaining;
+        if (serverCooldown > 0) {
+          setSecondsLeft(serverCooldown);
+        }
+
+        toast.success("Verify phone number");
+        setValues(payload);
+        next();
+        return true;
+      } catch (error) {
+        console.log(error);
+        return false;
+      } finally {
+        setIsPending(false);
+      }
+    },
+    [next, setValues, storeValues],
+  );
+
+  // Step 3
+  const submitOtp = useCallback(
+    async (values: Partial<RegisterFormValues>) => {
+      try {
+        setIsPending(true);
+        const payload = {
+          ...storeValues,
+          ...values,
+        };
+
+        await authApi.verifyOtp(payload);
+        onSuccess();
+        reset();
+        return true;
+      } catch (error) {
+        console.log(error);
+        return false;
+      } finally {
+        setIsPending(false);
+      }
+    },
+    [storeValues, setValues],
+  );
+
+  const resendOtp = useCallback(async () => {
+    const phone = storeValues.phone;
+    if (!phone) throw new Error("Phone жоқ");
     try {
-      const index = registerSteps.findIndex((s) => s.id === currentStep);
-      const step = registerSteps[index];
-      if (!step) {
-        toast.error("Invalid registration step");
-        return;
+      setIsResending(true);
+      const data = await authApi.resendOtp(phone);
+      const serverCooldown = data.data?.data.cooldownRemaining;
+      if (serverCooldown > 0) {
+        setSecondsLeft(serverCooldown);
       }
-      const isValid = await validateFormStep({
-        form,
-        steps: registerSteps,
-        stepId: currentStep,
-        setStep,
-      });
-      if (!isValid) return;
-
-      if (step.endpoint) {
-        const all = form.getValues();
-        const payload = Object.fromEntries(
-          (step.payloadFields ?? step.fields).map((f) => [f, all[f]]),
-        );
-
-        const res = await api.post<ApiResponse<{ message?: string }>>(
-          step.endpoint,
-          payload,
-        );
-
-        toast.success(res.data?.data?.message ?? "Successful");
-      }
-
-      const next = registerSteps[index + 1];
-      if (next) setStep(next.id);
-      else onComplete?.();
-    } catch (error: unknown) {
+    } catch (error) {
       console.log(error);
-
-      toast.error("error");
     } finally {
-      inFlight.current = false;
-      setIsLoading(false);
+      setIsResending(false);
     }
-  }, [currentStep, form, onComplete, setStep]);
+  }, [storeValues, setValues]);
 
-  return { currentStep, isLoading, handleNext };
+  return {
+    currentStep,
+    isPending,
+    submitInfo,
+    submitPassword,
+    submitOtp,
+    back,
+    resendOtp,
+    secondsLeft,
+    isResending,
+    canResend: secondsLeft === 0 && !isResending,
+  };
 }

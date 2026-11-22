@@ -1,15 +1,15 @@
 import type { Metadata } from "next";
-import { LoginForm } from "./_components/login-form";
+import { LoginPage } from "@/features/auth/components/auth-pages";
 
 export const metadata: Metadata = {
   title: "Login | Ornalas",
   description: "Ornalas аккаунтыңызға кіріңіз.",
 };
 
-export default function LoginPage() {
+export default function Page() {
   return (
     <div className="flex min-h-dvh items-center px-4 md:p-2 justify-center">
-      <LoginForm />
+      <LoginPage />
     </div>
   );
 }

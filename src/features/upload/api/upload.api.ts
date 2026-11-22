@@ -1,4 +1,4 @@
-import { api } from "@/lib/api/axios";
+import { clientApi } from "@/lib/api/client-axios";
 import type { AxiosResponse } from "axios";
 
 // ⚠️ Backend-тің нақты жауабына қарай түзет
@@ -20,7 +20,7 @@ export function createApartment(
   onProgress?: (percent: number) => void,
   signal?: AbortSignal,
 ): Promise<AxiosResponse<CreateApartmentResponse>> {
-  return api.post<CreateApartmentResponse>(
+  return clientApi.post<CreateApartmentResponse>(
     CREATE_APARTMENT_URL,
     formData,
     {

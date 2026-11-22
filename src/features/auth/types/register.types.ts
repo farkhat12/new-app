@@ -17,6 +17,7 @@ export interface User {
   phone: string;
   createdAt: string;
   role: UserRole;
+  avatar: string;
 }
 
 export interface RegisterStepProps {
